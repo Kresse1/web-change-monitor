@@ -27,11 +27,11 @@ def send_notification(message):
     except Exception as e:
         print(f"Fehler beim Senden: {e}")
 
-def check_job(url):
+def check_job(URL):
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'
     }
-    response = requests.get(url, headers=headers)
+    response = requests.get(URL, headers=headers)
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'html.parser')
     
@@ -56,15 +56,15 @@ def check_job(url):
     
     if old_content != text:
         print("ÄNDERUNG GEFUNDEN!")
-        send_notification(f'Änderung auf {url} erkannt!')
+        send_notification(f'Änderung auf {URL} erkannt!')
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(text)
     else:
         print("Keine Änderung")
-        send_notification(f'Keine Änderung auf {url} erkannt!')
+        send_notification(f'Keine Änderung auf {URL} erkannt!')
 
-schedule.every().day.at("08:00").do(check_job, url)
-schedule.every().day.at("20:00").do(check_job, url)
+schedule.every().day.at("08:00").do(check_job, URL)
+schedule.every().day.at("20:00").do(check_job, URL)
 
 while True:
     schedule.run_pending()
