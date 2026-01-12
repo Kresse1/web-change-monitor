@@ -1,0 +1,21 @@
+services:
+  gotify:
+    image: gotify/server
+    ports:
+      - "5000:80"
+    volumes:
+      - gotify-data:/app/data
+    env_file:
+      - .env
+
+  scraper:
+    build: .
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env
+    depends_on:
+      - gotify
+
+volumes:
+  gotify-data:
